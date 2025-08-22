@@ -1,5 +1,5 @@
 /* 	validate_voting_county_2018-0222.do
-	gypin 09/20/2023: Ran for nanda_voting_County20_2018-2022.dta
+	clary 09/20/2023: Ran for nanda_voting_County20_2018-2022.dta
 */
 local version "01"					/* 2-digit version # */
 local filestring "voting"			/* up to 8 characters, matches filename */
@@ -89,6 +89,7 @@ I don't think so?
 * VARIABLE RELATIONSHIPS
 * are there variables whose values ought to relate to one another (for example, sums or ratios), and do they do so as expected?
 Seems fine.
+
 
 
 log close
