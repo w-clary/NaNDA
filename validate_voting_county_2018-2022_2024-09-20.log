@@ -1,0 +1,255 @@
+--------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  O:\NaNDA\Data\voting\voting_county_2018-2022\code\validate_voting_county_2018-2022_2024-09-20.log
+  log type:  text
+ opened on:  20 Sep 2024, 10:31:11
+
+. 
+. ******************************************************************************
+. *Load working dataset
+. pwd
+O:\NaNDA\Data\voting\voting_county_2018-2022
+
+. use `workfile', clear
+
+. display "`workfile'"
+datasets\workfiles_received\nanda_voting_County20_2018-2022.dta
+
+. 
+. ******************************************************************************
+. * Dataset exploration & common validation checks
+. 
+. describe, fullnames
+
+Contains data from datasets\workfiles_received\nanda_voting_County20_2018-2022.dta
+ Observations:         9,746                  
+    Variables:            18                  20 Sep 2024 10:24
+--------------------------------------------------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+--------------------------------------------------------------------------------------------------------------------------------
+a1a             long    %12.0g                A1a
+cvap            float   %9.0g                 CVAP
+f1a             long    %12.0g                F1a
+fips            str5    %9s                   FIPS
+uss_dv          long    %12.0g                USS_dv
+uss_rv          long    %12.0g                USS_rv
+voterturnout    float   %9.0g                 VoterTurnOut
+balreg          float   %9.0g                 bal/reg
+candidatevotes_dv
+                long    %12.0g                
+candidatevotes_rv
+                long    %12.0g                
+partisanship_dem_presidential
+                float   %9.0g                 
+partisanship_dem_senate
+                float   %9.0g                 
+partisanship_rep_presidential
+                float   %9.0g                 
+partisanship_rep_senate
+                float   %9.0g                 
+reg_pct         float   %9.0g                 
+year            int     %8.0g                 
+partyindexdem   float   %9.0g                 PartyIndexDem
+partyindexrep   float   %9.0g                 PartyIndexRep
+--------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+
+. 
+. * NAMES AND LABELS (is it clear what they represent? should anything be renamed or relabeled for clarity? are units obvious?)
+. 
+. * reminder of standard names for geographic units
+. * stcofips20
+. 
+. 
+. * VALUE LABELS (do any variables have value labels? what are they?)
+. label list
+
+. 
+. 
+. 
+. * NAME/LABEL FORMAT PROBLEMS (is anything named inconsistently or formatted poorly?)
+. 
+. 
+. 
+. * DATA TYPES (are they appropriate for what we're storing?)
+. 
+. 
+. 
+. * NUMBER OF OBSERVATIONS
+. * counties & equivalents should be 3,143
+. 
+. summarize
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         a1a |      9,359    68754.84    216662.3          0    7412146
+        cvap |      9,694    80232.43    256369.2          0    7843598
+         f1a |      9,359    40438.71    119567.6          0    4263059
+        fips |          0
+      uss_dv |      5,870    21105.26    70464.19          5    1670306
+-------------+---------------------------------------------------------
+      uss_rv |      5,870    20507.19    44305.57          3     984203
+voterturnout |      9,359    .5208436    .1541217         -1        .98
+      balreg |      9,353    .5790854    .2521222         -1        .98
+candidate~dv |      3,153    38893.26    145443.8          4    3122322
+candidate~rv |      3,153    36638.88    94561.48         59    2986995
+-------------+---------------------------------------------------------
+partisansh.. |      3,153    .3405569    .1635381   .0311355   .9446695
+par~m_senate |      5,870    .3491013    .1635979   .0222821   .9788733
+partisansh.. |      3,153    .6594431    .1635381   .0553305   .9688644
+par~p_senate |      5,870    .6508987    .1635979   .0211268   .9777179
+     reg_pct |      9,359    .8328855    .1924848         -1        .98
+-------------+---------------------------------------------------------
+        year |      9,746    2019.989    1.631612       2018       2022
+partyindex~m |      8,111    .3617654     .161348   .0353677   .9788733
+partyindex~p |      8,111    .6382346     .161348   .0211268   .9646323
+
+. 
+. 
+. * LEADING ZEROS
+. 
+. * all county fips codes should be text format and 5 digits long
+. describe fips
+
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+--------------------------------------------------------------------------------------------------------------------------------
+fips            str5    %9s                   FIPS
+
+. generate countylen = strlen(fips)
+
+. tab countylen
+
+  countylen |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          5 |      9,746      100.00      100.00
+------------+-----------------------------------
+      Total |      9,746      100.00
+
+. 
+. 
+. 
+. * STATES/REGIONS REPRESENTED
+. 
+. * for census tracts and counties: we can check state
+. * 02 Alaska 
+. * 15 Hawaii 
+. * 72/43 Puerto Rico 
+. * 78/52 Virgin Islands 
+. generate state = substr(fips, 1, 2)
+
+. tab state
+
+      state |      Freq.     Percent        Cum.
+------------+-----------------------------------
+         00 |          1        0.01        0.01
+         01 |        201        2.06        2.07
+         02 |        125        1.28        3.36
+         04 |         45        0.46        3.82
+         05 |        225        2.31        6.13
+         06 |        174        1.79        7.91
+         08 |        192        1.97        9.88
+         09 |         18        0.18       10.07
+         10 |          9        0.09       10.16
+         11 |          3        0.03       10.19
+         12 |        201        2.06       12.25
+         13 |        477        4.89       17.15
+         15 |         15        0.15       17.30
+         16 |        132        1.35       18.65
+         17 |        306        3.14       21.79
+         18 |        276        2.83       24.63
+         19 |        297        3.05       27.67
+         20 |        315        3.23       30.90
+         21 |        360        3.69       34.60
+         22 |        192        1.97       36.57
+         23 |         48        0.49       37.06
+         24 |         72        0.74       37.80
+         25 |         42        0.43       38.23
+         26 |        249        2.55       40.79
+         27 |        261        2.68       43.46
+         28 |        246        2.52       45.99
+         29 |        345        3.54       49.53
+         30 |        168        1.72       51.25
+         31 |        279        2.86       54.11
+         32 |         51        0.52       54.64
+         33 |         30        0.31       54.95
+         34 |         63        0.65       55.59
+         35 |         99        1.02       56.61
+         36 |        186        1.91       58.52
+         37 |        300        3.08       61.59
+         38 |        159        1.63       63.23
+         39 |        264        2.71       65.93
+         40 |        231        2.37       68.30
+         41 |        108        1.11       69.41
+         42 |        201        2.06       71.48
+         44 |         30        0.31       71.78
+         45 |        138        1.42       73.20
+         46 |        199        2.04       75.24
+         47 |        285        2.92       78.17
+         48 |        796        8.17       86.33
+         49 |         87        0.89       87.23
+         50 |         42        0.43       87.66
+         51 |        402        4.12       91.78
+         53 |        117        1.20       92.98
+         54 |        165        1.69       94.67
+         55 |        216        2.22       96.89
+         56 |         69        0.71       97.60
+         72 |        234        2.40      100.00
+------------+-----------------------------------
+      Total |      9,746      100.00
+
+. 
+. 
+. * MISSINGNESS
+. ssc install mdesc
+checking mdesc consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. mdesc
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+            a1a |         387          9,746           3.97
+           cvap |          52          9,746           0.53
+            f1a |         387          9,746           3.97
+           fips |           0          9,746           0.00
+         uss_dv |       3,876          9,746          39.77
+         uss_rv |       3,876          9,746          39.77
+   voterturnout |         387          9,746           3.97
+         balreg |         393          9,746           4.03
+   candidate~dv |       6,593          9,746          67.65
+   candidate~rv |       6,593          9,746          67.65
+   partisansh.. |       6,593          9,746          67.65
+   par~m_senate |       3,876          9,746          39.77
+   partisansh.. |       6,593          9,746          67.65
+   par~p_senate |       3,876          9,746          39.77
+        reg_pct |         387          9,746           3.97
+           year |           0          9,746           0.00
+   partyindex~m |       1,635          9,746          16.78
+   partyindex~p |       1,635          9,746          16.78
+      countylen |           0          9,746           0.00
+          state |           0          9,746           0.00
+----------------+-----------------------------------------------
+
+. * do any variables have an unusually high level of missing?
+. 
+. 
+. 
+. * OUTLIER VALUES
+. * considering what they are, do any variables seem to have unusual max, min, or average values?
+. 
+. 
+. 
+. * VARIABLE RELATIONSHIPS
+. * are there variables whose values ought to relate to one another (for example, sums or ratios), and do they do so as expected
+> ?
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  O:\NaNDA\Data\voting\voting_county_2018-2022\code\validate_voting_county_2018-2022_2024-09-20.log
+  log type:  text
+ closed on:  20 Sep 2024, 10:31:12
+--------------------------------------------------------------------------------------------------------------------------------
