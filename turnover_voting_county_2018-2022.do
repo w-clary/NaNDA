@@ -1,5 +1,5 @@
 /* 	turnover_voting_county_d2018-2022.do
-	gypin 09/20/2024: nanda_voting_County20_2018-2022.dta
+	clary 09/20/2024: nanda_voting_County20_2018-2022.dta
 */
 
 * Parameters - update each time the script is run
@@ -128,4 +128,5 @@ rename type Type
 rename varlab Label
 
 export excel using `dictionary2', firstrow(variables) replace
+
 log close
